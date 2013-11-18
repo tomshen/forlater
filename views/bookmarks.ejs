@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>For Later</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <h1>For Later - Bookmarks</h1>
+    <p>Welcome, <%= displayName %>!</p>
+    <ul id="bookmarks">
+    <% for(var i=0; i<bookmarks.length; i++) {%>
+      <li class="bookmark">
+        <a href="<%= bookmarks[i].url %>"><%= bookmarks[i].title %></a>:
+        <%= bookmarks[i].description %>
+      </li>
+    <% } %>
+    </ul>
+    <script src="/js/app.js"></script>
+  </body>
+</html>
