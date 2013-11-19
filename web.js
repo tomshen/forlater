@@ -14,8 +14,14 @@ var Bookmark, User;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback () {
   var bookmarkSchema = new mongoose.Schema({
-    title: String,
-    description: String,
+    title: {
+      type: String,
+      default: "Saved bookmark"
+    },
+    description: {
+      type: String,
+      default: ""
+    },
     link: String,
     date_added: {
       type: Date,

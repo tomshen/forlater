@@ -5,8 +5,7 @@
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
-    <h1>For Later - Bookmarks</h1>
-    <p>Welcome, <%= name %>!</p>
+    <h1>For Later - <%= name %>'s Bookmarks</h1>
     <ul id="bookmarks">
     <% for(var i=0; i<bookmarks.length; i++) {%>
       <li class="bookmark">
@@ -19,9 +18,25 @@
     <% } %>
     </ul>
     <form action="/bookmarks/add" method="post">
-      <input type="text" name="title" id="new_bookmark_title">
-      <input type="textarea" name="description" id="new_bookmark_description">
-      <input type="text" name="link" id="new_bookmark_link">
+      <h2>Add a bookmark</h2>
+      <p>
+        <label for="new_bookmark_title">
+          <div>Title:</div>
+          <input type="text" name="title" id="new_bookmark_title" size=60>
+        </label>
+      </p>
+      <p>
+        <label for="new_bookmark_description">
+          <div>Description (optional):</div>
+          <textarea name="description" id="new_bookmark_description" cols=43></textarea>
+        </label>
+      </p>
+      <p>
+        <label for="new_bookmark_link">
+          <div>URL:</div>
+          <input type="url" name="link" id="new_bookmark_link" size=60>
+        </label>
+      </p>
       <button>Add bookmark</button>
     </form>
     <script src="/js/app.js"></script>
