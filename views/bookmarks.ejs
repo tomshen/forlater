@@ -9,7 +9,7 @@
     <ul id="bookmarks">
     <% for(var i=0; i<bookmarks.length; i++) {%>
       <li class="bookmark">
-        <a href="<%= bookmarks[i].link %>"><%= bookmarks[i].title %></a>:
+        <a href="<%= bookmarks[i].link %>"><%= bookmarks[i].title %></a><% if (bookmarks[i].description) { %>: <% } %>
         <%= bookmarks[i].description %>
         <form action="/bookmarks/<%= bookmarks[i].id %>/delete" method="post">
           <button>Delete</button>
