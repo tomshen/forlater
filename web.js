@@ -1,37 +1,79 @@
 var path = require('path')
   , express = require('express')
-  , mongo = require('mongodb')
+  , mongoose = require('mongoose')
   , passport = require('passport')
   , TwitterStrategy = require('passport-twitter').Strategy;
 
 // Set up MongoDB
 var mongoUri = process.env.MONGOLAB_URI
             || process.env.MONGOHQ_URL
-            || 'mongodb://localhost/forlater';
-
-var User = {};
-User.findOrCreate = function (user, callback) {
-  // TODO: find or create user
-  callback(null, {
-    displayName: user.displayName,
-    bookmarks: [
-      {
-        title: 'Hacker News',
-        description: 'Awesome news site',
-        url: 'https://news.ycombinator.com/'
-      },
-    ]
+            || 'mongodb://localhost/test';
+mongoose.connect(mongoUri);
+var db = mongoose.connection;
+var Bookmark, User;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  var bookmarkSchema = new mongoose.Schema({
+    title: String,
+    description: String,
+    link: String,
+    date_added: {
+      type: Date,
+      default: Date.now
+    },
+    read: {
+      type: Boolean,
+      default: false
+    }
   });
-}
-User.addBookmark = function (user, callback) {
+  Bookmark = mongoose.model('Bookmark', bookmarkSchema);
 
-}
-User.updateBookmark = function (user, callback) {
+  var userSchema = new mongoose.Schema({
+    name: String,
+    twitterId: String,
+    bookmarks: [bookmarkSchema]
+  });
+  userSchema.statics.findOrCreate = function (profile, callback) {
+    this.findOne({ twitterId: profile.id }, function (err, user) {
+      if (err) {
+        callback(err);
+      }
+      else if (user === null) {
+        var user = new User({
+          name: profile.displayName,
+          twitterId: profile.id,
+          bookmarks: []
+        });
+        user.save(callback);
+      } else {
+        callback(null, user);
+      }
+    });
+  };
+  userSchema.methods.addBookmark = function (bookmarkData, callback) {
+    var bookmark = new Bookmark(bookmarkData);
+    var user = this;
+    bookmark.save(function (err, bookmark) {
+      if (err) {
+        callback(err);
+      } else {
+        user.bookmarks.push(bookmark);
+        user.save(callback);
+      }
+    });
+  }
+  userSchema.methods.deleteBookmark = function (bookmarkId, callback) {
+    User.update({ _id: this.id },
+      { $pull: { bookmarks: { _id: bookmarkId } } }, function (err) {
+        if (err)
+          callback(err);
+        Bookmark.remove({ _id: bookmarkId }, callback);
+      });
+  }
+  User = mongoose.model('User', userSchema);
 
-}
-User.deleteBookmark = function (user, callback) {
-
-}
+  console.log('Connected to database.');
+});
 
 // Set up Express
 var app = express();
@@ -43,7 +85,10 @@ app.configure(function() {
   app.set('view engine', 'ejs');
   app.use(express.cookieParser());
   app.use(express.bodyParser());
-  app.use(express.session({ secret: process.env.SECRET_KEY }));
+  app.use(express.cookieSession({
+    secret: process.env.SECRET_KEY,
+    maxAge: 3600000
+  }));
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(app.router);
@@ -58,16 +103,20 @@ passport.use(new TwitterStrategy({
   },
   function(token, tokenSecret, profile, done) {
     User.findOrCreate(profile, function(err, user) {
-      if (err) { return done(err); }
+      if (err) {
+        return done(err);
+      }
       done(null, user);
     });
   }
 ));
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  done(null, user.id);
 });
-passport.deserializeUser(function(user, done) {
-  done(null, user);
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function (err, user) {
+    done(err, user);
+  });
 });
 
 app.get('/', function(req, res) {
@@ -75,9 +124,28 @@ app.get('/', function(req, res) {
 });
 
 app.get('/bookmarks', function(req, res) {
+  if (!('user' in req))
+    res.redirect('/auth/twitter');
   res.render('bookmarks', {
-    displayName: req.user.displayName,
+    name: req.user.name,
     bookmarks: req.user.bookmarks
+  });
+});
+
+app.post('/bookmarks/add', function(req, res) {
+  console.log(req.body);
+  req.user.addBookmark(req.body, function (err, user) {
+    if (err)
+      console.error(err);
+    res.redirect('/bookmarks');
+  });
+});
+
+app.post('/bookmarks/:bookmarkId/delete', function(req, res) {
+  req.user.deleteBookmark(req.params.bookmarkId, function (err) {
+    if (err)
+      console.error(err);
+    res.redirect('/bookmarks');
   });
 });
 
