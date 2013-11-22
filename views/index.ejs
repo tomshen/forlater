@@ -1,16 +1,43 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Later</title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/foundation.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/modernizr.js"></script>
   </head>
   <body>
-    <h1>For Later</h1>
-    <p>
-    <b>For Later</b> is a minimalistic bookmarking service. Sign in with
-    Twitter, and you'll get a place to store temporary bookmarks for later
-    access.
-    </p>
-    <a href="/auth/twitter">Sign in with Twitter</a>
+    <header class="row">
+      <div class="large-8 large-centered columns">
+        <h1>For Later</h1>
+      </div>
+    </header>
+    <div class="row">
+      <div class="large-8 large-centered columns">
+        <img id="splash" src="/img/splash.jpg">
+        <p>
+          <b>For Later</b> is a minimalistic bookmarking service. Sign in with
+          Twitter, and you'll get a place to store temporary bookmarks for later
+          access.
+        </p>
+        <div class="row">
+          <div class="large-6 small-centered columns">
+            <a href="/auth/twitter" class="medium round button small-centered columns">Sign in with Twitter</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="row">
+      <div class="large-8 small-centered columns">
+        Created by <a href="http://www.tomshen.me/">Tom Shen.</a>
+      </div>
+    </footer>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
   </body>
 </html>

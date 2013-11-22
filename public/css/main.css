@@ -1,0 +1,15 @@
+#splash {
+  margin-bottom: 2rem;
+}
+
+.bookmark-delete {
+  float: right;
+}
+
+#bookmarks {
+  list-style-type: none;
+}
+
+footer {
+  padding: 2rem;
+}

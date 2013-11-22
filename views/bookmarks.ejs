@@ -1,44 +1,74 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Later</title>
-    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/foundation.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/modernizr.js"></script>
   </head>
   <body>
-    <h1>For Later - <%= name %>'s Bookmarks</h1>
-    <ul id="bookmarks">
-    <% for(var i=0; i<bookmarks.length; i++) {%>
-      <li class="bookmark">
-        <a href="<%= bookmarks[i].link %>"><%= bookmarks[i].title %></a><% if (bookmarks[i].description) { %>: <% } %>
-        <%= bookmarks[i].description %>
-        <form action="/bookmarks/<%= bookmarks[i].id %>/delete" method="post">
-          <button>Delete</button>
-        </form>
-      </li>
-    <% } %>
-    </ul>
-    <form action="/bookmarks/add" method="post">
-      <h2>Add a bookmark</h2>
-      <p>
-        <label for="new_bookmark_title">
-          <div>Title:</div>
-          <input type="text" name="title" id="new_bookmark_title" size=60>
-        </label>
-      </p>
-      <p>
-        <label for="new_bookmark_description">
-          <div>Description (optional):</div>
-          <textarea name="description" id="new_bookmark_description" cols=43></textarea>
-        </label>
-      </p>
-      <p>
-        <label for="new_bookmark_link">
-          <div>URL:</div>
-          <input type="url" name="link" id="new_bookmark_link" size=60>
-        </label>
-      </p>
-      <button>Add bookmark</button>
-    </form>
+    <header class="row">
+      <div class="large-8 large-centered columns">
+        <h1>For Later</h1>
+        <h2 class="subheader"><%= name %>'s Bookmarks</h2>
+      </div>
+    </header>
+    <div class="row">
+      <div class="large-8 large-centered columns">
+        <ol id="bookmarks">
+          <% for(var i=0; i<bookmarks.length; i++) {%>
+            <li class="bookmark">
+              <div class="row">
+                <button class="bookmark-delete small secondary alert" form="bookmark-delete-form<%= bookmarks[i].id %>">Delete</button>
+                <h4><a href="<%= bookmarks[i].link %>"><%= bookmarks[i].title %></a></h4>
+                <p><%= bookmarks[i].description %></p>
+
+                <form id="bookmark-delete-form<%= bookmarks[i].id %>" action="/bookmarks/<%= bookmarks[i].id %>/delete" method="post">
+                </form>
+              </div>
+            </li>
+          <% } %>
+        </ol>
+        <div class="row">
+          <div class="large-8 columns panel">
+            <form action="/bookmarks/add" method="post" data-abide>
+              <h3>Add a bookmark</h3>
+              <div>
+                <label for="new_bookmark_title">Title <small>required</small></label>
+                <input type="text" name="title" id="new_bookmark_title" size=60 required>
+                <small class="error">Title is required.</small>
+              </div>
+              <div>
+                <label for="new_bookmark_description">Description</label>
+                <textarea name="description" id="new_bookmark_description" cols=43></textarea>
+              </div>
+              <div>
+                <label for="new_bookmark_link">URL <small>required</small></label>
+                <input type="url" name="link" id="new_bookmark_link" size=60 required>
+              </div>
+              <br>
+              <div class="row">
+                <div class="large-6 small-centered columns">
+                  <button class="large-12 small-centered small success button">Add bookmark</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer class="row">
+      <div class="large-8 small-centered columns">
+        Created by <a href="http://www.tomshen.me/">Tom Shen.</a>
+      </div>
+    </footer>
+    <script src="/js/jquery.js"></script>
+    <script src="/js/foundation.min.js"></script>
     <script src="/js/app.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
   </body>
 </html>

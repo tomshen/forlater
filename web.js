@@ -85,7 +85,7 @@ db.once('open', function callback () {
 var app = express();
 app.configure(function() {
   app.use(express.logger());
-  app.use(express.static(path.join(__dirname, 'views')));
+  app.use(express.static(path.join(__dirname, 'public')));
   app.set('port', process.env.PORT || 5000);
   app.set('views', path.join(__dirname, 'views'));
   app.set('view engine', 'ejs');
