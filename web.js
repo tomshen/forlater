@@ -101,11 +101,11 @@ app.configure(function() {
 });
 
 // Set up Twitter login
+var site_url = process.env.SITE_URL || "http://localhost:5000";
 passport.use(new TwitterStrategy({
     consumerKey: process.env.TWITTER_CONSUMER_KEY,
     consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
-    callbackURL: (process.env.SITE_URL || "http://localhost:5000")
-               + "/auth/twitter/callback"
+    callbackURL: site_url + "/auth/twitter/callback"
   },
   function(token, tokenSecret, profile, done) {
     User.findOrCreate(profile, function(err, user) {
@@ -134,16 +134,28 @@ app.get('/bookmarks', function(req, res) {
     res.redirect('/auth/twitter');
   res.render('bookmarks', {
     name: req.user.name,
-    bookmarks: req.user.bookmarks
+    bookmarks: req.user.bookmarks,
+    site_url: site_url
   });
 });
 
 app.post('/bookmarks/add', function(req, res) {
-  console.log(req.body);
   req.user.addBookmark(req.body, function (err, user) {
     if (err)
       console.error(err);
     res.redirect('/bookmarks');
+  });
+});
+
+app.get('/bookmarks/add', function(req, res) {
+  req.user.addBookmark({
+    url: req.query.url || '',
+    title: req.query.title || '',
+    description: req.query.description || ''
+  }, function (err, user) {
+    if (err)
+      console.error(err);
+    res.render('add_bookmark')
   });
 });
 

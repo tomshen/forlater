@@ -32,7 +32,7 @@
           <% } %>
         </ol>
         <div class="row">
-          <div class="large-8 columns panel">
+          <div class="large-6 columns panel">
             <form action="/bookmarks/add" method="post" data-abide>
               <h3>Add a bookmark</h3>
               <div>
@@ -55,6 +55,14 @@
                 </div>
               </div>
             </form>
+          </div>
+          <div class="large-6 columns">
+            <h3>Bookmarklet</h3>
+            <p>Drag the following bookmarklet to your bookmarks bar. Then,
+            when you're on a web page you want to save for later, click the
+            bookmarklet. Highlight text if you want to save it as a
+            description.</p>
+            <p><a href="javascript:(function(){var u,d,t;u=location.href;if(document.getSelection){d=document.getSelection()}else{d=''};t=document.title;void(open('<%- site_url %>/bookmarks/add?url='+encodeURIComponent(u)+'&description='+encodeURIComponent(d)+'&title='+encodeURIComponent(t),'For Later','toolbar=no,width=250,height=40'))})();">Save for later</a></p>
           </div>
         </div>
       </div>
