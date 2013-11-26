@@ -7,7 +7,7 @@
     d = '';
   };
   t = document.title;
-  void(open('http://localhost:5000/bookmarks/add?url='
+  void(open('http://localhost:5000/bookmarks/add?bookmark_url='
      + encodeURIComponent(u)
      + '&description=' + encodeURIComponent(d)
      + '&title=' + encodeURIComponent(t),

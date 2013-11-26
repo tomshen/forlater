@@ -62,7 +62,7 @@
             when you're on a web page you want to save for later, click the
             bookmarklet. Highlight text if you want to save it as a
             description.</p>
-            <p><a href="javascript:(function(){var u,d,t;u=location.href;if(document.getSelection){d=document.getSelection()}else{d=''};t=document.title;void(open('<%- site_url %>/bookmarks/add?url='+encodeURIComponent(u)+'&description='+encodeURIComponent(d)+'&title='+encodeURIComponent(t),'For Later','toolbar=no,width=250,height=40'))})();">Save for later</a></p>
+            <p><a href="javascript:(function(){var u,d,t;u=location.href;if(document.getSelection){d=document.getSelection()}else{d=''};t=document.title;void(open('<%- site_url %>/bookmarks/add?bookmark_url='+encodeURIComponent(u)+'&description='+encodeURIComponent(d)+'&title='+encodeURIComponent(t),'For Later','toolbar=no,width=250,height=40'))})();">Save for later</a></p>
           </div>
         </div>
       </div>

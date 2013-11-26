@@ -151,8 +151,9 @@ app.post('/bookmarks/add', function(req, res) {
 });
 
 app.get('/bookmarks/add', function(req, res) {
+  console.log(req.query);
   req.user.addBookmark({
-    url: req.query.url || '',
+    link: req.query.bookmark_url || '',
     title: req.query.title || '',
     description: req.query.description || ''
   }, function (err, user) {
