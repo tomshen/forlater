@@ -1,3 +1,6 @@
+// set up New Relic monitoring
+require('newrelic');
+
 var path = require('path')
   , express = require('express')
   , mongoose = require('mongoose')
